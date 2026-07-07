@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NearMe — Stop Googling. Start Going.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --black:#0f0f0f;
+  --orange:#ce6012;
+  --amber:#b85c00;
+  --dim:#7a3a0a;
+  --surface:#1a1a1a;
+  --border:#2e2e2e;
+  --text:#f0f0f0;
+  --muted:#666;
+  --sub:#999;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-weight:400;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 48px;
+  background:rgba(15,15,15,0.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(46,46,46,0.5);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;letter-spacing:2px;color:var(--orange);
+}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.nav-link{
+  font-size:13px;color:var(--muted);text-decoration:none;
+  transition:color 0.2s;
+}
+.nav-link:hover{color:var(--text)}
+.nav-cta{
+  background:var(--orange);color:#fff;border:none;
+  border-radius:8px;padding:9px 20px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;text-decoration:none;
+  transition:opacity 0.2s;
+}
+.nav-cta:hover{opacity:0.85}
+
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:120px 24px 80px;
+  position:relative;
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(206,96,18,0.08) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:11px;letter-spacing:3px;color:var(--orange);
+  text-transform:uppercase;margin-bottom:24px;
+  opacity:0;animation:fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-headline{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(56px,9vw,100px);
+  font-weight:400;
+  line-height:1.0;
+  letter-spacing:-2px;
+  color:var(--text);
+  margin-bottom:8px;
+  opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;
+}
+.hero-headline em{
+  font-style:italic;
+  color:var(--orange);
+  position:relative;
+}
+.hero-headline em::after{
+  content:'';
+  position:absolute;bottom:-4px;left:0;right:0;
+  height:2px;background:var(--orange);
+  transform:scaleX(0);transform-origin:left;
+  animation:underline 0.6s ease 1.2s forwards;
+}
+@keyframes underline{to{transform:scaleX(1)}}
+
+.hero-sub{
+  font-size:17px;color:var(--muted);margin-top:24px;
+  max-width:420px;line-height:1.7;
+  opacity:0;animation:fadeUp 0.8s ease 0.6s forwards;
+}
+.hero-actions{
+  display:flex;align-items:center;gap:16px;margin-top:40px;
+  opacity:0;animation:fadeUp 0.8s ease 0.8s forwards;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--orange);color:#fff;
+  border:none;border-radius:12px;padding:15px 28px;
+  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;
+  text-decoration:none;cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px)}
+.btn-secondary{
+  font-size:14px;color:var(--muted);text-decoration:none;
+  transition:color 0.2s;
+}
+.btn-secondary:hover{color:var(--text)}
+.hero-note{
+  margin-top:16px;font-size:12px;color:#444;
+  opacity:0;animation:fadeUp 0.8s ease 1s forwards;
+}
+
+.marquee-wrap{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:14px 0;overflow:hidden;
+  background:var(--surface);
+}
+.marquee-track{
+  display:flex;gap:48px;width:max-content;
+  animation:marquee 20s linear infinite;
+}
+.marquee-item{
+  font-size:12px;color:#444;letter-spacing:1.5px;
+  text-transform:uppercase;white-space:nowrap;
+  display:flex;align-items:center;gap:12px;
+}
+.marquee-item::after{content:'✦';color:var(--orange);font-size:8px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+.section{padding:100px 48px;max-width:1100px;margin:0 auto}
+.section-label{
+  font-size:11px;letter-spacing:3px;color:var(--orange);
+  text-transform:uppercase;margin-bottom:16px;
+}
+.section-title{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(36px,5vw,54px);
+  font-weight:400;line-height:1.1;letter-spacing:-1px;
+  margin-bottom:60px;
+}
+.section-title em{font-style:italic;color:var(--orange)}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.step{
+  background:var(--surface);padding:36px 32px;
+  border:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.step:hover{border-color:rgba(206,96,18,0.3)}
+.step:first-child{border-radius:16px 0 0 16px}
+.step:last-child{border-radius:0 16px 16px 0}
+.step-num{
+  font-family:'Instrument Serif',serif;
+  font-size:72px;font-weight:400;
+  color:rgba(206,96,18,0.1);
+  position:absolute;top:-10px;right:20px;
+  line-height:1;
+}
+.step-emoji{font-size:28px;margin-bottom:16px;display:block}
+.step-title{font-size:17px;font-weight:600;color:var(--text);margin-bottom:8px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:60px}
+.feature{
+  background:var(--surface);padding:32px;
+  border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.feature:hover{border-color:rgba(206,96,18,0.25)}
+.feature:nth-child(1){border-radius:16px 0 0 0}
+.feature:nth-child(2){border-radius:0 16px 0 0}
+.feature:nth-child(3){border-radius:0 0 0 16px}
+.feature:nth-child(4){border-radius:0 0 16px 0}
+.feature-icon{font-size:24px;margin-bottom:14px;display:block}
+.feature-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px}
+.feature-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+.download-section{
+  padding:100px 48px;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;
+  border-top:1px solid var(--border);
+}
+.download-title{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(40px,6vw,72px);
+  font-weight:400;line-height:1.1;letter-spacing:-1.5px;
+  margin-bottom:20px;
+}
+.download-title em{font-style:italic;color:var(--orange)}
+.download-sub{font-size:16px;color:var(--muted);margin-bottom:40px;max-width:400px}
+.download-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--orange);color:#fff;
+  border-radius:14px;padding:18px 36px;
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;
+  text-decoration:none;
+  transition:all 0.2s;
+  margin-bottom:16px;
+}
+.download-btn:hover{opacity:0.88;transform:translateY(-2px)}
+.download-note{font-size:12px;color:#444}
+
+footer{
+  border-top:1px solid var(--border);
+  padding:32px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-logo{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--orange);letter-spacing:2px;font-weight:600}
+.footer-note{font-size:12px;color:#333}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:16px 24px}
+  .section{padding:60px 24px}
+  .steps{grid-template-columns:1fr}
+  .step:first-child,.step:last-child,.step{border-radius:0}
+  .step:first-child{border-radius:12px 12px 0 0}
+  .step:last-child{border-radius:0 0 12px 12px}
+  .features-grid{grid-template-columns:1fr}
+  .feature:nth-child(n){border-radius:0}
+  .feature:first-child{border-radius:12px 12px 0 0}
+  .feature:last-child{border-radius:0 0 12px 12px}
+  .download-section{padding:60px 24px}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    NEARME
+  </div>
+  <div style="display:flex;gap:32px">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#features" class="nav-link">Features</a>
+  </div>
+  <a href="#download" class="nav-cta">Download</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <p class="hero-eyebrow">Last-minute plans, sorted</p>
+  <h1 class="hero-headline">
+    Stop Googling.<br><em>Start Going.</em>
+  </h1>
+  <p class="hero-sub">
+    Tell us how you feel, your budget, and how far you'll go.
+    NearMe finds the perfect spot — instantly.
+  </p>
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">
+      ↓ Download for Android
+    </a>
+    <a href="#how" class="btn-secondary">See how it works →</a>
+  </div>
+  <p class="hero-note">Free · No account needed · Works anywhere in India</p>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Mood-based discovery</span>
+    <span class="marquee-item">Real GPS location</span>
+    <span class="marquee-item">Swipe to decide</span>
+    <span class="marquee-item">Spin the fate wheel</span>
+    <span class="marquee-item">Open in Google Maps</span>
+    <span class="marquee-item">Book a cab instantly</span>
+    <span class="marquee-item">Works in any city</span>
+    <span class="marquee-item">Completely free</span>
+    <span class="marquee-item">Mood-based discovery</span>
+    <span class="marquee-item">Real GPS location</span>
+    <span class="marquee-item">Swipe to decide</span>
+    <span class="marquee-item">Spin the fate wheel</span>
+    <span class="marquee-item">Open in Google Maps</span>
+    <span class="marquee-item">Book a cab instantly</span>
+    <span class="marquee-item">Works in any city</span>
+    <span class="marquee-item">Completely free</span>
+  </div>
+</div>
+
+<section class="section" id="how">
+  <p class="section-label reveal">How it works</p>
+  <h2 class="section-title reveal">Three steps to<br><em>your next plan</em></h2>
+  <div class="steps reveal">
+    <div class="step">
+      <span class="step-num">1</span>
+      <span class="step-emoji">🧭</span>
+      <div class="step-title">Set your vibe</div>
+      <p class="step-desc">Choose your mood, how many people, your budget, and how far you'll go.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">2</span>
+      <span class="step-emoji">🃏</span>
+      <div class="step-title">Swipe through spots</div>
+      <p class="step-desc">Real nearby places show up as cards. Swipe right to pick, left to skip.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">3</span>
+      <span class="step-emoji">📍</span>
+      <div class="step-title">Go there</div>
+      <p class="step-desc">Open directions in Google Maps or book a cab — all in one tap.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features" style="padding-top:0">
+  <p class="section-label reveal">Why NearMe</p>
+  <h2 class="section-title reveal">Built for the<br><em>spontaneous ones</em></h2>
+  <div class="features-grid reveal">
+    <div class="feature">
+      <span class="feature-icon">🎲</span>
+      <div class="feature-title">Fate Wheel</div>
+      <p class="feature-desc">Can't decide? Add your options and let the oracle choose. No blame, pure destiny.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">📡</span>
+      <div class="feature-title">Real data, real places</div>
+      <p class="feature-desc">Powered by Google Places. Every result is a real place near your actual location.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Under 30 seconds</div>
+      <p class="feature-desc">From "I'm bored" to a destination with directions in less than half a minute.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-title">No account needed</div>
+      <p class="feature-desc">Open the app, find a place, go. No sign up, no subscription, no nonsense.</p>
+    </div>
+  </div>
+</section>
+
+<section class="download-section" id="download">
+  <h2 class="download-title reveal">Ready to<br><em>go somewhere?</em></h2>
+  <p class="download-sub reveal">Download the APK and install it on your Android phone. Free forever.</p>
+  <a href="YOUR_APK_LINK_HERE" class="download-btn reveal">
+    ↓ Download NearMe APK
+  </a>
+  <p class="download-note reveal">
+    Android only · Enable "Install from unknown sources" in your settings
+  </p>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <div class="nav-dot"></div>
+    NEARME
+  </div>
+  <p class="footer-note">Made with ✦ for spontaneous humans</p>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
