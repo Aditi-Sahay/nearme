@@ -2,9 +2,11 @@
 A website for downloading the app: NearMe, designed to show you a list of all places around you using your IP address using a Google provided places API key based on the filters you apply.
 
 ## Tech Stack
+
 #App:
 - React Native
 - Expo Go
+
 #Website
 - HTML
 - Vercel
